@@ -17,9 +17,9 @@ steps:
     npm run build
   displayName: 'Install dependencies and build the project'
 
-- script: |
-    npm start
-  displayName: 'Run the application'
+# - script: |
+#     npm start
+#   displayName: 'Run the application'
 
 # Additional steps for artifacts and deployment
 - task: PublishBuildArtifacts@1
