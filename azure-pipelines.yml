@@ -1,0 +1,23 @@
+trigger:
+- main
+
+pool:
+  name: MyAgents  # Specify the self-hosted agent pool
+  demands:
+    - agent.name -equals MyAgent  # Ensure the pipeline runs on your specific agent
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '20.x'  # Specify the Node.js version
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'Install dependencies and build the project'
+
+- script: |
+    mkdir -p $(Agent.WorkFolder)/artifacts/react-build
+    cp -r build/* $(Agent.WorkFolder)/artifacts/react-build/
+  displayName: 'Save build artifacts locally'
