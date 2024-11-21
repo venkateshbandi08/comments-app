@@ -9,7 +9,7 @@ pool:
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '20.x'  # Specify the Node.js version to install
+    versionSpec: '16.x'  # Specify the Node.js version to install
   displayName: 'Install Node.js'
 
 - script: |
@@ -24,6 +24,6 @@ steps:
 # Additional steps for artifacts and deployment
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: 'build'  # Adjust the path if necessary based on your project structure
+    PathtoPublish: 'build'
     ArtifactName: 'react-build'
   displayName: 'Publish Build Artifacts'
