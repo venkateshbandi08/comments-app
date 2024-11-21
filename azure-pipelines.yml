@@ -2,7 +2,7 @@ trigger:
 - main
 
 pool:
-  name: MyAgents  # Specify the self-hosted agent pool
+  name: MyPools  # Specify the self-hosted agent pool
   demands:
     - agent.name -equals MyAgent  # Ensure the pipeline runs on your specific agent
 
