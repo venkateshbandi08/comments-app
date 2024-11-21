@@ -7,38 +7,26 @@ pool:
     - agent.name -equals MyAgent  # Ensure the pipeline runs on your specific agent
 
 steps:
-# Step 1: Install Node.js
 - task: NodeTool@0
-  displayName: 'Install Node.js 14.x'
   inputs:
-    versionSpec: '14.x'  # Match the Node.js version range from package.json
+    versionSpec: '14.x'  # Specify the Node.js version to install
+  displayName: 'Install Node.js'
 
-# Step 2: Install dependencies
 - script: |
-    npm ci
-  displayName: 'Install dependencies'
-
-# Step 3: Build the React project
-- script: |
+    npm install
     npm run build
-  displayName: 'Build React project'
+  displayName: 'Install dependencies and build the project'
 
-# Step 4: Debug directory structure (optional)
-- script: |
-    dir "$(System.DefaultWorkingDirectory)"
-    dir "$(System.DefaultWorkingDirectory)\build"
-  displayName: 'Debug Build Directory'
+# - script: |
+#     npm start
+#   displayName: 'Run the application'
 
-# Step 5: Package the build artifacts
-- script: |
-    mkdir "%AGENT_WORKFOLDER%\artifacts"
-    xcopy /E /I "$(System.DefaultWorkingDirectory)\build" "%AGENT_WORKFOLDER%\artifacts\react-build"
-  displayName: 'Package Build Artifacts'
-
-# Step 6: Publish build artifacts to Azure Pipelines
+# Additional steps for artifacts and deployment
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Build Artifacts'
   inputs:
-    PathtoPublish: '%AGENT_WORKFOLDER%\artifacts\react-build'
-    ArtifactName: 'ReactBuild'
-    publishLocation: 'Container'
+    PathtoPublish: 'build'  # Adjust the path if necessary based on your project structure
+    ArtifactName: 'react-build'
+  displayName: 'Publish Build Artifacts'
+
+# (Optional) Add any deployment task if needed.
+# For example, deploying to Azure App Service, static site hosting, etc.
