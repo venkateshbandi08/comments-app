@@ -2,14 +2,14 @@ trigger:
 - main
 
 pool:
-  name: MyPools  # Specify the self-hosted agent pool
+  name: MyPools  # Specify the self-hosted agent pool name
   demands:
     - agent.name -equals MyAgent  # Ensure the pipeline runs on your specific agent
 
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '20.x'  # Specify the Node.js version
+    versionSpec: '20.x'  # Specify the Node.js version to install
   displayName: 'Install Node.js'
 
 - script: |
@@ -18,6 +18,12 @@ steps:
   displayName: 'Install dependencies and build the project'
 
 - script: |
-    mkdir "%AGENT_WORKFOLDER%\artifacts\react-build"
-    xcopy /E /I build "%AGENT_WORKFOLDER%\artifacts\react-build\"
-  displayName: 'Save build artifacts locally'
+    npm start
+  displayName: 'Run the application'
+
+# Additional steps for artifacts and deployment
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'build'  # Adjust the path if necessary based on your project structure
+    ArtifactName: 'react-build'
+  displayName: 'Publish Build Artifacts'
