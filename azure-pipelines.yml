@@ -16,8 +16,10 @@ steps:
     npm install
     npm run build
   displayName: 'Install dependencies and build the project'
+  shell: cmd  # Use cmd.exe shell for Windows
 
 - script: |
-    mkdir -p $(Agent.WorkFolder)/artifacts/react-build
-    cp -r build/* $(Agent.WorkFolder)/artifacts/react-build/
+    mkdir "%AGENT_WORKFOLDER%\artifacts\react-build"
+    xcopy /E /I build "%AGENT_WORKFOLDER%\artifacts\react-build\"
   displayName: 'Save build artifacts locally'
+  shell: cmd  # Use cmd.exe shell for Windows
