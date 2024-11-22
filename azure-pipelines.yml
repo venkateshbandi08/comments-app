@@ -2,36 +2,37 @@ trigger:
 - main
 
 pool:
-  name: MyPools  # Specify the self-hosted agent pool name
+  name: MyPools
   demands:
-    - agent.name -equals MyAgent  # Ensure the pipeline runs on your specific agent
+    - agent.name -equals MyAgent
 
 steps:
-# Step 1: Install Node.js
+# Step 1: Checkout the code
+- task: Checkout@1
+  displayName: 'Checkout source code'
+  inputs:
+    clean: true
+
+# Step 2: Install Node.js using NodeTool
 - task: NodeTool@0
   inputs:
-    versionSpec: '14.x'  # Match Node.js version to your project's requirements
+    versionSpec: '14.x'  # Specify the required Node.js version
   displayName: 'Install Node.js'
 
-# Step 2: Install dependencies and build the project
+# Step 3: Install project dependencies
 - script: |
     npm install
-    npm run build
-  displayName: 'Install Dependencies and Build'
+  displayName: 'Install dependencies'
 
-# Step 3: Debug directory structure
+# Step 4: Run the build script
 - script: |
-    dir "$(System.DefaultWorkingDirectory)"
-    dir "$(System.DefaultWorkingDirectory)\build"
-  displayName: 'Debug Directory Structure'
+    npm run build
+  displayName: 'Build the Vite project'
 
-# Step 4: Publish build artifacts
+# Step 5: Publish build artifacts
 - task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(System.DefaultWorkingDirectory)\build'  # Use the full path to the build directory
-    ArtifactName: 'react-build'
-    publishLocation: 'Container'
   displayName: 'Publish Build Artifacts'
-
-# (Optional) Add any deployment task if needed.
-# For example, deploying to Azure App Service, static site hosting, etc.
+  inputs:
+    pathtoPublish: 'dist'  # Output folder created by Vite
+    artifactName: 'vite-build'
+    publishLocation: 'Container'
